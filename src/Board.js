@@ -27,12 +27,14 @@ import "./Board.css";
  *
  **/
 
-function Board({ nrows = 5, ncols = 5, chanceLightStartsOn = .25 }) {
+function Board({ nrows = 5, ncols = 5, chanceLightStartsOn = .25 }) { 
   //don't forget to add default values for everything!
   const [board, setBoard] = useState(createBoard());
 
   /** create a board nrows high/ncols wide, each cell randomly lit or unlit */
-  function createBoard(nrows, ncols, chanceLightStartsOn) {
+  function createBoard() {
+    //don't forget to pass in the correct args from the props!!
+
     let initialBoard = [];
     // TODO: create array-of-arrays of true/false values
     //need to make nrows number of subarrays containing ncol number of trues
@@ -41,23 +43,23 @@ function Board({ nrows = 5, ncols = 5, chanceLightStartsOn = .25 }) {
     //push to initialBoard
     for(let i = 0; i < nrows; i++){
       const row = Array(ncols);
-      row.fill(true);
-      initialBoard.push(row);
+      row.fill(true);   
+      initialBoard.push(row); 
+      console.log("line 48 initialBoard: ", initialBoard);
     }
+
     // TODO: randomly flip cells to finish initial board
     //iterate over initialBoard
     //tap into each element of a subarray
     //if math.random is > chanceLightStartsOn, flip and pass coord into flipCellsAround()
     for(let row = 0; row < nrows; row++){
-      // let colVals = initialBoard[row];
-
       for(let col = 0; col < ncols; col++){
         if(Math.random() > chanceLightStartsOn){
           flipCellsAround(`${row}-${col}`);
         }
       }
     } 
-
+    console.log("line 64 inside createBoard, initialBoard: ", initialBoard);
     return initialBoard;
   }
 
@@ -112,15 +114,7 @@ function Board({ nrows = 5, ncols = 5, chanceLightStartsOn = .25 }) {
   }
 
   // TODO: if the game is won, just show a winning msg & render nothing else
-  if(hasWon()) {
-    return (
-    <div className="Board winmsg">
-      <span>
-        "You won!"
-      </span>
-    </div>
-    )
-  }
+
 
   // TODO:  make table board
   //can't do a nested map bc you need to loop for unique keys 
