@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Cell from "./Cell";
 import "./Board.css";
 
@@ -30,38 +30,40 @@ import "./Board.css";
 function Board({ nrows = 5, ncols = 5, chanceLightStartsOn = .25 }) { 
   //don't forget to add default values for everything!
   const [board, setBoard] = useState(createBoard());
+  
 
   /** create a board nrows high/ncols wide, each cell randomly lit or unlit */
   function createBoard() {
-    //don't forget to pass in the correct args from the props!!
-
-    let initialBoard = [];
     // TODO: create array-of-arrays of true/false values
     //need to make nrows number of subarrays containing ncol number of trues
       //loop i <= nrows (for number of subarrays)
       //create an array of nrow # elements, .fill(true) to populate 
     //push to initialBoard
+    let initialBoard = [];
     for(let i = 0; i < nrows; i++){
       const row = Array(ncols);
       row.fill(true);   
       initialBoard.push(row); 
-      console.log("line 48 initialBoard: ", initialBoard);
+      console.log("line 46 initialBoard: ", initialBoard);
     }
+    return initialBoard;
+  } 
 
     // TODO: randomly flip cells to finish initial board
     //iterate over initialBoard
     //tap into each element of a subarray
     //if math.random is > chanceLightStartsOn, flip and pass coord into flipCellsAround()
-    for(let row = 0; row < nrows; row++){
-      for(let col = 0; col < ncols; col++){
-        if(Math.random() > chanceLightStartsOn){
-          flipCellsAround(`${row}-${col}`);
+    useEffect(function flipRandomCellsOnRender(){
+      for(let row = 0; row < nrows; row++){
+        for(let col = 0; col < ncols; col++){
+          if(Math.random() > chanceLightStartsOn){
+            flipCellsAround(`${row}-${col}`);
+          }
         }
-      }
-    } 
-    console.log("line 64 inside createBoard, initialBoard: ", initialBoard);
-    return initialBoard;
-  }
+      } 
+      console.log("line 63 inside useEffect, board: ", board);
+      return board;
+    }, [])
 
   function hasWon() {
     // TODO: check the board in state to determine whether the player has won.
