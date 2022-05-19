@@ -61,8 +61,7 @@ function Board({ nrows = 5, ncols = 5, chanceLightStartsOn = .25 }) {
           }
         }
       } 
-      console.log("line 63 inside useEffect, board: ", board);
-      return board;
+      // console.log("line 64 inside useEffect, board: ", board);
     }, [])
 
   function hasWon() {
@@ -168,20 +167,23 @@ function Board({ nrows = 5, ncols = 5, chanceLightStartsOn = .25 }) {
     <div className="Board">
       { hasWon() === false &&
       <table className="Board board-table">
-        {board.map((row, rowIdx) => (
-          <tr key={rowIdx}>
-            {
-              row.map((col, colIdx) => (
-                <Cell 
-                  key={`{rowIdx}-{colIdx}`}
-                  flipCellsAroundMe={evt => flipCellsAround(`${rowIdx}-${colIdx}`)}
-                  isLit={board[rowIdx][colIdx]}
-                />
-              ))
-            }
-          </tr>
-        ))
-        } 
+        <tbody>
+          {board.map((row, rowIdx) => (
+            <tr key={rowIdx}>
+              {
+                row.map((col, colIdx) => (
+                  <Cell 
+                    key={`${rowIdx}-${colIdx}`}
+                    flipCellsAroundMe={evt => flipCellsAround(`${rowIdx}-${colIdx}`)}
+                    isLit={board[rowIdx][colIdx]}
+                  />
+                ))
+              }
+            </tr>
+          ))
+          } 
+        </tbody>
+      
       </table>
       }
       { hasWon() === true &&
