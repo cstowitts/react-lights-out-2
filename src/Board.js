@@ -126,6 +126,7 @@ function Board({ nrows = 5, ncols = 5, chanceLightStartsOn = .25 }) {
   //can't do a nested map bc you need to loop for unique keys 
   //(the coords for each cell, that's where the coord arg comes from)
 
+  /** Rithm Solution
   const tableBoard = [];
 
   for(let row = 0; row < nrows; row++){
@@ -133,21 +134,70 @@ function Board({ nrows = 5, ncols = 5, chanceLightStartsOn = .25 }) {
     let tableRow = [];
 
     for(let col = 0; col < ncols; col++){
+      let coord = `${row}-${col}`;
       tableRow.push(
         <Cell 
-          key={`${row}-${col}`}
+          key={coord}
           classname="Cell" 
-          flipCellsAroundMe={flipCellsAround}
+          flipCellsAroundMe={evt => flipCellsAround(coord)}
           isLit={board[row][col]}
         />
+        //we don't actually do anything with the evt arg (which is being passed into the => fn)
+        //this seems more semantic, to indicate that the Cell component
+        //is going to listen for an event and the result of it
+        //will be a call to the flipCellsAround with coord as the arg 
       )
-      tableBoard.push(tableRow);
     }
+    tableBoard.push(<tr key={row}>{tableRow}</tr>);
+    //very important to include a key, each row will have its own unique row #
   } 
+  */
 
-
+  /**
+   * remember, map is for arrays!
+   * the arrays we have are:
+   *  -the board (an arr of subarrs)
+   *  -and each row (subarr of bools)
+   * 
+   * the plan for the return:
+   * if hasWon is false
+   * we will create the table board to render
+   * 
+   * need to map over each subarr(row) in board to make each row
+   * and within each tablerow element
+   * we'll need to map again over the specific subarr(row)
+   * to populate each tablerow with Cell components
+   */
   return (
-    
+    <div className="Board">
+      { hasWon() === false &&
+      <table className="Board board-table">
+        {board.map((row, rowIdx) => (
+          <tr key={rowIdx}>
+            {
+              row.map((col, colIdx) => (
+                <Cell 
+                  key={`{rowIdx}-{colIdx}`}
+                  flipCellsAroundMe={evt => flipCellsAround(`${rowIdx}-${colIdx}`)}
+                  isLit={board[rowIdx][colIdx]}
+                />
+              ))
+            }
+          </tr>
+        ))
+        } 
+      </table>
+      }
+      { hasWon() === true &&
+        <div className="Board win-msg container">
+          <span className="Board win-msg">
+            "you win, you champion!!! you turn them lights on!!"
+          </span>
+        </div>
+        
+      }
+    </div>
+   
   )
 }
 
